@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Shambhavi Garg</title>
+<meta name="description" content="A portfolio in six faces.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Hanken+Grotesk:wght@300;400;500&family=Josefin+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#ebe9e5;--soft:#b9b7b3;--mute:#8d8d90;--line:rgba(255,255,255,.13);--serif:"Cormorant Garamond","Iowan Old Style",Georgia,serif;--sans:"Hanken Grotesk","Helvetica Neue",Helvetica,Arial,sans-serif}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#000;color:var(--ink);font-family:var(--sans);overflow:hidden;-webkit-font-smoothing:antialiased}
+body{background:radial-gradient(ellipse at 50% 46%,#1c1c20 0%,#070708 52%,#000 100%)}
+:focus-visible{outline:1px solid #d6d6d9;outline-offset:4px}
+#halo{position:fixed;left:50%;top:50%;width:min(70vw,640px);height:min(70vw,640px);transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,rgba(214,214,222,.5) 0%,rgba(214,214,222,.22) 32%,rgba(214,214,222,0) 70%);filter:blur(38px);opacity:0;transition:opacity 2.6s ease;animation:haloPulse 5.5s ease-in-out infinite;z-index:1;pointer-events:none}
+@keyframes haloPulse{0%,100%{opacity:.55}50%{opacity:.85}}
+body.ready #halo{opacity:1}body.open #halo{opacity:0!important;transition-duration:1s}
+@media(prefers-reduced-motion:reduce){#halo{animation:none;opacity:.7!important}}
+#gl{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:grab;opacity:0;transition:opacity 2.6s ease;z-index:2}
+body.ready #gl{opacity:1}#gl.drag{cursor:grabbing}#gl.hov{cursor:pointer}
+.tiny{position:fixed;font-size:.68rem;letter-spacing:.24em;text-transform:uppercase;color:var(--mute);transition:opacity 1.2s ease;pointer-events:none}
+#nm{left:0;right:0;top:calc(26px + env(safe-area-inset-top));text-align:center;opacity:0;font-size:.9rem;letter-spacing:.28em;z-index:6}
+body.ready #nm{opacity:1;transition-delay:1.1s}
+body.open #nm{opacity:0!important;transition-delay:0s}
+#top{position:fixed;left:0;right:0;bottom:calc(24px + env(safe-area-inset-bottom));text-align:center;opacity:0;transition:opacity 1.2s ease;pointer-events:none;z-index:6}
+body.ready #top{opacity:1;transition-delay:1.1s}
+body.used #top,body.open #top{opacity:0!important;transition-delay:0s}
+#hint{font-size:.92rem;letter-spacing:.32em;text-transform:uppercase;color:var(--ink);padding:.55rem 1.1rem;border:1px solid var(--line);border-radius:999px;animation:pulseHint 2.6s ease-in-out infinite}
+@keyframes pulseHint{0%,100%{opacity:.55;box-shadow:0 0 0 0 rgba(235,233,229,.12)}50%{opacity:1;box-shadow:0 0 18px 2px rgba(235,233,229,.12)}}
+@media(prefers-reduced-motion:reduce){#hint{animation:none;opacity:.85}}
+#front{position:fixed;left:0;right:0;bottom:16vh;text-align:center;font:600 clamp(1rem,1.8vw,1.35rem)/1 'Josefin Sans',sans-serif;letter-spacing:.42em;text-transform:uppercase;opacity:0;transition:opacity .9s ease;pointer-events:none}
+#faces{position:fixed;left:50%;transform:translateX(-50%);bottom:12px;display:flex;gap:6px;z-index:5}
+#faces:not(:focus-within):not(.show){position:absolute;clip:rect(0 0 0 0);width:1px;height:1px;overflow:hidden}
+body.open #faces{display:none}
+body.open #gl{z-index:15;pointer-events:none}
+#faces button,.back{background:none;border:0;color:var(--soft);font:italic 300 1.1rem var(--serif);padding:.5rem .8rem;cursor:pointer}
+#faces.show button{color:var(--ink);font-size:1.3rem}
+.back{position:fixed;left:calc(14px + env(safe-area-inset-left));top:calc(14px + env(safe-area-inset-top));width:68px;height:68px;z-index:20;padding:0;display:none;font-size:0}
+body.open .back{display:block}
+#room{position:fixed;inset:0;z-index:10;overflow-y:auto;overflow-x:hidden;background:rgba(3,3,4,.9);opacity:0;visibility:hidden;transition:opacity 1.1s ease,visibility 0s 1.1s;scroll-behavior:smooth;-webkit-overflow-scrolling:touch}
+#room.on{opacity:1;visibility:visible;transition:opacity 1.3s ease .15s}
+.inner{max-width:1080px;margin:0 auto;padding:clamp(96px,14vh,150px) clamp(22px,6vw,90px) 18vh clamp(22px,9vw,130px)}
+.line{font-size:.72rem;letter-spacing:.24em;text-transform:uppercase;color:var(--mute);margin:0 0 .6rem}
+#rt:focus,#rt:focus-visible{outline:0}
+h1{font:italic 300 clamp(3.6rem,13vw,9.5rem)/.92 var(--serif);letter-spacing:-.02em;margin:0;outline:0}
+.say{font:italic 300 clamp(1.7rem,3.8vw,3.1rem)/1.16 var(--serif);max-width:21em;margin:clamp(4rem,12vh,8rem) 0 3.5rem}
+.p{color:var(--soft);max-width:56ch;line-height:1.85;font-weight:300;margin:0 0 1.3rem}
+.stats{display:flex;flex-wrap:wrap;gap:2.4rem 5rem;margin:3rem 0 4rem}
+.stat b{display:block;font:300 clamp(2.6rem,6vw,4.8rem)/1 var(--serif)}
+.stat span{display:block;margin-top:.5rem;max-width:20ch;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mute);line-height:1.6}
+.rows{margin:2rem 0 4rem;border-top:1px solid var(--line)}
+details.row{border-bottom:1px solid var(--line)}
+summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:150px 1fr 18px;gap:1.4rem;align-items:baseline;padding:1.5rem 0}
+summary::-webkit-details-marker{display:none}
+summary small{font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
+summary h3{margin:0;font:400 clamp(1.3rem,2.4vw,1.85rem)/1.2 var(--serif);transition:color .5s,letter-spacing .6s}
+summary:hover h3{color:#fff;letter-spacing:.012em}
+summary i{position:relative;width:12px;height:12px;justify-self:end}
+summary i::before,summary i::after{content:"";position:absolute;background:var(--soft);transition:transform .4s}
+summary i::before{left:0;right:0;top:5.5px;height:1px}summary i::after{top:0;bottom:0;left:5.5px;width:1px}
+details[open] summary i::after{transform:scaleY(0)}
+details.row .p{padding:0 0 1.8rem 168px;margin:0;max-width:60ch}
+.photos{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(230px,100%),1fr));gap:1.4rem;margin:3rem 0 4rem;align-items:start}
+.photos.n1{grid-template-columns:minmax(0,440px)}
+figure{margin:0;min-width:0}
+figure img{display:block;width:100%;height:auto;max-height:62vh;object-fit:cover;filter:grayscale(1) contrast(1.06) brightness(.85);transition:filter 1.2s ease}
+figure:hover img{filter:none}
+figcaption{margin-top:.6rem;font:italic 300 1rem var(--serif);color:var(--mute)}
+.vid{margin:3rem 0 4rem;max-width:640px}
+.vid-box{position:relative;width:100%;padding-top:56.25%;background:#000;border:1px solid var(--line)}
+.vid-box iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.vid figcaption{margin-top:.7rem}
+.tags{margin:2.5rem 0;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--mute);line-height:2.2}
+.tags span+span::before{content:"/";margin:0 .9em;opacity:.5}
+.links a,.form a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);transition:border-color .4s}
+.links a:hover,.form a:hover{border-color:#fff}
+.form{margin:2rem 0}.form .links{display:flex;flex-wrap:wrap;gap:.6rem 2.4rem;margin-bottom:2.4rem;color:var(--soft)}
+.form label{display:block;margin:1.4rem 0 0;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--mute)}
+.form input,.form textarea{width:100%;background:none;border:0;border-bottom:1px solid var(--line);color:var(--ink);font:300 1.05rem var(--sans);padding:.7rem 0;outline:0;resize:none;border-radius:0}
+.form input:focus,.form textarea:focus{border-color:#fff}
+.form button{margin-top:2rem;background:none;border:1px solid var(--line);color:var(--ink);font:italic 300 1.2rem var(--serif);padding:.7rem 1.8rem;cursor:pointer;transition:background .4s,color .4s}
+.form button:hover{background:var(--ink);color:#000}.form .st{margin-top:1rem;font-size:.9rem;color:var(--soft);min-height:1.4em}
+.chatbox{margin:2.5rem 0 1rem;max-width:640px}
+.chatlog{display:flex;flex-direction:column;gap:.9rem;min-height:80px;max-height:50vh;overflow-y:auto;padding-right:.4rem;margin-bottom:1.2rem}
+.msg{max-width:82%;padding:.7rem 1rem;font-size:.95rem;line-height:1.55;border:1px solid var(--line)}
+.msg.me{align-self:flex-end;background:rgba(255,255,255,.06)}
+.msg.ai{align-self:flex-start;color:var(--soft)}
+.chatform{display:flex;gap:.7rem}
+.chatform input{flex:1;background:none;border:0;border-bottom:1px solid var(--line);color:var(--ink);font:300 1rem var(--sans);padding:.6rem 0;outline:0}
+.chatform input:focus{border-bottom-color:#fff}
+.chatform button{background:none;border:1px solid var(--line);color:var(--ink);font:600 .74rem 'Josefin Sans',sans-serif;letter-spacing:.14em;text-transform:uppercase;padding:.6rem 1.3rem;cursor:pointer;transition:background .3s,color .3s}
+.chatform button:hover{background:var(--ink);color:#000}
+.chatnote{margin-top:1rem;font-size:.82rem;color:var(--mute)}
+/* six rooms, six temperaments */
+[data-s=persona] .inner{max-width:980px}
+[data-s=innovation] summary h3{font-size:clamp(1.6rem,3.2vw,2.5rem)}
+[data-s=milestones] .rows{display:grid;grid-template-columns:1fr 1fr;column-gap:3rem;border:0}[data-s=milestones] details.row{border-top:1px solid var(--line);border-bottom:0}[data-s=milestones] summary{grid-template-columns:1fr 18px}[data-s=milestones] summary small{grid-column:1/-1}[data-s=milestones] details.row .p{padding-left:0}
+[data-s=research] .say{max-width:16em;font-size:clamp(2rem,4.6vw,3.8rem)}[data-s=research] details.row{border-left:1px solid var(--line);padding-left:1.4rem}[data-s=research] details.row .p{padding-left:168px}
+[data-s=community] .rows{border-top:0;border-left:1px solid var(--line);margin-left:6px}[data-s=community] details.row{position:relative;padding-left:1.4rem;border-bottom:0}[data-s=community] details.row::before{content:"";position:absolute;left:-4px;top:2.05rem;width:7px;height:7px;border-radius:50%;background:#cfcfd2}
+[data-s=outreach] .say{margin-top:6rem}[data-s=outreach] .inner{max-width:900px}
+@media(max-width:760px){summary{grid-template-columns:1fr 18px}summary small{grid-column:1/-1}details.row .p,[data-s=research] details.row .p{padding-left:0}[data-s=milestones] .rows{grid-template-columns:1fr}.inner{padding-top:104px;padding-left:22px}}
+@media(prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;transition-delay:0s!important;animation:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div id="halo" aria-hidden="true"></div><canvas id="gl" aria-hidden="true"></canvas>
+<div class="tiny" id="nm">shambhavi garg</div>
+<div id="top" role="status"><span id="hint"></span></div>
+<div id="front" aria-hidden="true"></div>
+<nav id="faces" aria-label="Six faces of the cube"></nav>
+<button class="back" id="back" aria-label="Return to the cube">Return</button>
+<main id="room" aria-label="Section"><div class="inner" id="inner"></div></main>
+<noscript><p style="position:fixed;top:40%;width:100%;text-align:center;color:#aaa">This portfolio needs JavaScript. Write to shambhavi.garg@stonybrook.edu</p></noscript>
+
+<script src="vendor/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script src="data.js"></script>
+<script>
+(()=>{
+const D=window.portfolioData, $=id=>document.getElementById(id), body=document.body;
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const S=D.sections, N=S.length;
+/* ---------- content rendering (reads data.js only) ---------- */
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const R={
+ say:b=>`<p class="say">${esc(b.text)}</p>`,
+ p:b=>`<p class="p">${esc(b.text)}</p>`,
+ stats:b=>`<div class="stats">${b.items.map(i=>`<div class="stat"><b>${esc(i[0])}</b><span>${esc(i[1])}</span></div>`).join('')}</div>`,
+ rows:b=>`<div class="rows">${b.items.map((r,i)=>`<details class="row"${i?'':' open'}><summary><small>${esc(r.meta)}</small><h3>${esc(r.title)}</h3><i></i></summary><p class="p">${esc(r.text)}</p></details>`).join('')}</div>`,
+ photos:b=>`<div class="photos n${b.items.length}">${b.items.map(i=>`<figure><img src="${i.src}" alt="${esc(i.cap||'Photo of Shambhavi')}" loading="lazy" decoding="async">${i.cap?`<figcaption>${esc(i.cap)}</figcaption>`:''}</figure>`).join('')}</div>`,
+ tags:b=>`<div class="tags">${b.items.map(t=>`<span>${esc(t)}</span>`).join('')}</div>`,
+ video:b=>`<div class="vid"><div class="vid-box"><iframe src="https://www.youtube-nocookie.com/embed/${b.id}?rel=0&modestbranding=1" title="${esc(b.cap||'video')}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>${b.cap?`<figcaption>${esc(b.cap)}</figcaption>`:''}</div>`,
+ links:b=>`<p class="links">${b.items.map(l=>`<a href="${l.href}" target="_blank" rel="noopener">${esc(l.label)}</a>`).join(' ')}</p>`,
+ chat:()=>`<div class="chatbox" id="chatbox"><div class="chatlog" id="chatlog" aria-live="polite"></div><form id="chatform" class="chatform" autocomplete="off"><input id="chatinput" maxlength="300" placeholder="Ask me anything — research, SANJAY-VR, VECTOR, leadership..." required><button type="submit">Ask</button></form><p class="chatnote">A portfolio assistant grounded in what I've actually shared. For the real me: <a href="mailto:${D.contact.email}">email</a> or <a href="${D.contact.linkedin}" target="_blank" rel="noopener">LinkedIn</a>.</p></div>`,
+ contact:()=>{const c=D.contact;return `<div class="form"><div class="links"><a href="mailto:${c.email}">${c.email}</a><a href="tel:${c.phone.replace(/[^+\d]/g,'')}">${c.phone}</a><a href="${c.linkedin}" target="_blank" rel="noopener">LinkedIn</a></div>
+ <label for="cn">Your name</label><input id="cn" autocomplete="name"><label for="ce">Email</label><input id="ce" type="email" autocomplete="email"><label for="cm">Message</label><textarea id="cm" rows="3"></textarea>
+ <button id="cs" type="button">Send</button><div class="st" id="cst" role="status"></div></div>`}
+};
+function render(i){const s=S[i];return `<p class="line">${esc(s.line)}</p><h1 id="rt" tabindex="-1">${esc(s.name)}</h1>`+s.blocks.map(b=>R[b.k](b)).join('')}
+const room=$('room'),inner=$('inner');let openIdx=-1;
+function showRoom(i){
+  openIdx=i;room.dataset.s=S[i].id;room.setAttribute('aria-label',S[i].name);inner.innerHTML=render(i);
+  body.classList.add('open','used');room.classList.add('on');room.scrollTop=0;
+  setTimeout(()=>$('rt')&&$('rt').focus({preventScroll:true}),400);
+  const cs=$('cs');if(cs)cs.onclick=send;
+}
+function hideRoom(){
+  room.classList.remove('on');body.classList.remove('open');
+  const i=openIdx;openIdx=-1;state='idle';vel.set(0,0);
+  const b=fb[i];b&&b.focus({preventScroll:true});
+}
+function send(){
+  const st=$('cst'),n=$('cn').value.trim(),e=$('ce').value.trim(),m=$('cm').value.trim();
+  if(!n||!e||!m){st.textContent='Please fill in every field.';return}
+  const c=D.emailjs;$('cs').disabled=true;st.textContent='Sending…';
+  try{emailjs.init(c.publicKey);}catch(x){}
+  emailjs.send(c.service,c.template,{from_name:n,from_phone:'Not provided',from_email:e,purpose:'Portfolio cube',message:m})
+   .then(()=>{st.textContent='Sent. I will reply soon.';$('cn').value=$('ce').value=$('cm').value='';$('cs').disabled=false})
+   .catch(()=>{st.textContent='That did not send. Please email '+D.contact.email;$('cs').disabled=false});
+}
+$('hint').textContent=D.hint;
+/* ---------- local portfolio assistant ----------
+   No API key, server, or external AI service. Answers are grounded in the
+   structured portfolio data in data.js and never pretend to know missing facts.
+*/
+const chatHist=[];
+function portfolioItems(){
+ const items=[];
+ D.sections.forEach(s=>{
+  if(s.id==='talk')return;
+  s.blocks.forEach(b=>{
+   if(b.k==='say'||b.k==='p')items.push({section:s.id,name:s.name,text:b.text,type:b.k});
+   if(b.k==='rows')b.items.forEach(r=>items.push({section:s.id,name:s.name,text:r.title+' — '+r.text,type:'row'}));
+   if(b.k==='stats')b.items.forEach(r=>items.push({section:s.id,name:s.name,text:r[0]+' '+r[1],type:'stat'}));
+   if(b.k==='tags')items.push({section:s.id,name:s.name,text:b.items.join(', '),type:'tags'});
+  });
+ });
+ return items;
+}
+const KB=portfolioItems();
+const norm=s=>String(s||'').toLowerCase().replace(/[’']/g,"'").replace(/[^a-z0-9\s-]/g,' ').replace(/\s+/g,' ').trim();
+const intents={
+ research:['research','researcher','policy','survey','data','sapi','digital policy','digital personal data','war widow','war widows','veer naris','welfare'],
+ innovation:['innovation','sanjay','sanjay vr','sanjay-vr','virtual reality','vr','combat training','vector','portfolio intelligence'],
+ community:['community','charity','volunteer','volunteering','meraki','project prakash','blind children','war widows','film intern','rotary'],
+ persona:['persona','background','army kid','army child','schools','school','stony brook','who are you','grew up','personality'],
+ milestones:['milestone','milestones','leadership','award','awards','model un','mun','women in business','mext','mext scholarship','econocrats','digex'],
+ skills:['skills','strengths','python','statistics','storytelling','filmmaking','negotiation','public speaking','data analysis'],
+ education:['education','university','college','stony brook','applied mathematics','computer science','major','degree'],
+ films:['film','filmmaking','filmmaker','documentary','camera','video'],
+ future:['future','goals','career','want to do','interested in','policy','economics','international relations']
+};
+function intentFor(q){
+ const n=norm(q); let best=null,score=0;
+ for(const [k,terms] of Object.entries(intents)){
+  let s=0; for(const t of terms){const x=norm(t);if(n.includes(x))s+=x.includes(' ')?4:2;}
+  if(s>score){score=s;best=k;}
+ }
+ return best;
+}
+function renderMsg(role,text){const log=$('chatlog');if(!log)return;const d=document.createElement('div');d.className='msg '+(role==='user'?'me':'ai');d.style.whiteSpace='pre-line';d.textContent=text;log.appendChild(d);log.scrollTop=log.scrollHeight;return d}
+function sectionText(id){return KB.filter(x=>x.section===id).map(x=>x.text)}
+function concise(text,n=620){const t=String(text).replace(/\s+/g,' ').trim();return t.length<=n?t:t.slice(0,n).replace(/\s+\S*$/,'')+'…'}
+function answerForIntent(intent,q){
+ const map={research:'research',innovation:'innovation',community:'community',persona:'persona',milestones:'milestones'};
+ const sid=map[intent];
+ if(sid){
+  const vals=sectionText(sid); const intro=vals.filter((_,i)=>i<3);
+  if(sid==='research') return `Research is a major part of my work because I am interested in what happens when policy meets real people. ${concise(vals[1]||'',650)}\n\nI also worked on war-widow research with Dr. Chetan Ralekar, studying Veer Naris, their access to welfare, and the gaps between policy on paper and policy in practice. ${concise(vals[2]||'',520)}`;
+  if(sid==='innovation') return `The main technical project in my portfolio is SANJAY-VR. ${concise(vals[0]||'',500)}\n\nI spearheaded the project along a team of highly accomplished engineers, and the system went into real use, training over 10,000 Indian Army personnel. ${concise(vals[2]||'',520)}\n\nI am also exploring VECTOR, a portfolio intelligence platform designed to turn fragmented portfolio-company data into operational decisions through KPI analysis, benchmarking, monitoring, and an AI-driven Action Engine.`;
+  if(sid==='community') return `My community work combines art, data, and direct service. ${concise(vals[0]||'',430)}\n\n${concise(vals[1]||'',520)}\n\nI have also worked on Project Prakash, Meraki Commune, a financial-literacy and welfare-access program for India's war widows, and a Rotary fundraiser.`;
+  if(sid==='persona') return `I grew up as an army kid, moving through ten schools in ten years across India. That taught me adaptability and how to find my footing quickly. ${concise(vals[1]||'',500)}\n\nToday I study Applied Mathematics & Statistics at Stony Brook University, with Computer Science as a planned double major.`;
+  if(sid==='milestones') return `My milestones span leadership, academics, Model UN, filmmaking, and community-building. ${concise(vals[1]||'',700)}\n\n${concise(vals[2]||'',500)}`;
+ }
+ const n=norm(q);
+ if(intent==='skills')return 'My core skills include Python, data analysis, statistical research, filmmaking, public speaking, negotiation, storytelling, and adaptability.';
+ if(intent==='education')return 'I am studying Applied Mathematics & Statistics at Stony Brook University, with Computer Science as a planned double major, and I expect to graduate in 2030.';
+ if(intent==='films')return 'Filmmaking is one of the ways I combine storytelling with social impact. My portfolio includes documentary work, Project Prakash, and a national gold medal in the WAVES Film Competition.';
+ if(intent==='future')return 'I am interested in work at the intersection of data, technology, public policy, economics, and international relations, especially where quantitative analysis and storytelling can create practical impact.';
+ return null;
+}
+function localAnswer(q){
+ const n=norm(q); if(!n)return '';
+ const follow=/^(tell me more|more|go on|expand|explain more|what else|why|how so)\b/.test(n);
+ let intent=intentFor(q); if(follow&&chatHist.length)intent=chatHist[chatHist.length-1];
+ const ans=answerForIntent(intent,q);
+ if(ans){chatHist.push(intent);return ans;}
+ const scored=KB.map(x=>{let s=0;for(const w of n.split(' ')){if(w.length>2&&norm(x.text).includes(w))s+=1}return [s,x]}).filter(x=>x[0]>0).sort((a,b)=>b[0]-a[0]);
+ if(scored.length){chatHist.push(scored[0][1].section);return scored.slice(0,3).map(x=>concise(x[1].text,420)).join('\n\n');}
+ return "I don't have enough information in my portfolio to answer that without guessing. Ask me about my research, SANJAY-VR, VECTOR, community work, background, leadership, filmmaking, or Stony Brook.";
+}
+function chatSend(e){e.preventDefault();const inp=$('chatinput');if(!inp)return;const text=inp.value.trim();if(!text)return;renderMsg('user',text);inp.value='';setTimeout(()=>renderMsg('ai',localAnswer(text)),220)}
+document.addEventListener('submit',e=>{if(e.target&&e.target.id==='chatform')chatSend(e)});
+/* keyboard / screen-reader / no-WebGL access to the six faces */
+const fbox=$('faces'),fb=S.map((s,i)=>{const b=document.createElement('button');b.textContent=s.name;b.onclick=()=>openFace(i);fbox.appendChild(b);return b});
+addEventListener('keydown',e=>{if(e.key==='Escape'&&openIdx>-1)hideRoom()});
+$('back').onclick=hideRoom;
+
+/* ---------- 3D cube ---------- */
+let state='idle',target=null,snapI=0,vel=new THREE.Vector2(),hover=-1,drag=false;
+const cv=$('gl');let renderer;
+try{renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true,powerPreference:'high-performance'})}catch(e){}
+function openFace(i){
+  if(!renderer){showRoom(i);return}
+  if(state==='section')return;
+  target=FQ[i];snapI=i;state='snap';vel.set(0,0);
+  if(reduce){cube.quaternion.copy(target)}
+}
+const FQ=[[0,0,0],[0,-Math.PI/2,0],[0,Math.PI/2,0],[Math.PI/2,0,0],[-Math.PI/2,0,0],[0,Math.PI,0]].map(e=>new THREE.Quaternion().setFromEuler(new THREE.Euler(...e)));
+const FN=[[0,0,1],[1,0,0],[-1,0,0],[0,1,0],[0,-1,0],[0,0,-1]].map(v=>new THREE.Vector3(...v));
+const MI=[4,0,1,2,3,5];let cube,pg,mats=[],camera,scene,key,floor,fov=32,camZ=13;
+if(!renderer){body.classList.add('ready');fbox.classList.add('show')}
+else{
+ renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+ renderer.outputEncoding=THREE.sRGBEncoding;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;
+ renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+ scene=new THREE.Scene();camera=new THREE.PerspectiveCamera(fov,1,.1,60);
+ /* studio environment: a few emissive softboxes in a dark room */
+ const es=new THREE.Scene();es.background=new THREE.Color(0x030304);
+ const sb=(w,h,x,y,z,k,tint)=>{const m=new THREE.Mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial({color:new THREE.Color(tint||0xffffff).multiplyScalar(k),side:THREE.DoubleSide,toneMapped:false}));m.position.set(x,y,z);m.lookAt(0,0,0);es.add(m)};
+ sb(12,5,0,9,3,6);sb(1.6,13,-8,0,4,5.2);sb(1.2,13,8.5,1,3,4,0xf2f6ff);sb(6,1.2,0,-3,9,2.6);sb(14,2,0,-8,0,.4);sb(1.4,10,4,2,-9,3.2);sb(12,6,-5,5,-8,1)
+ const pm=new THREE.PMREMGenerator(renderer);scene.environment=pm.fromScene(es,.035).texture;pm.dispose();
+ const rim=new THREE.DirectionalLight(0xdfe8ff,.9);rim.position.set(-5,2,-4);scene.add(rim);key=new THREE.DirectionalLight(0xffffff,.85);key.position.set(3,6,5);key.castShadow=true;key.shadow.mapSize.set(1024,1024);
+ Object.assign(key.shadow.camera,{left:-5,right:5,top:5,bottom:-5,near:1,far:20});key.shadow.radius=6;scene.add(key);
+ floor=new THREE.Mesh(new THREE.PlaneGeometry(40,40),new THREE.ShadowMaterial({opacity:.4}));floor.rotation.x=-Math.PI/2;floor.position.y=-2.05;floor.receiveShadow=true;scene.add(floor);
+ pg=new THREE.Group();scene.add(pg);
+ const mk=()=>{
+  const face=(i)=>{
+   const W=512,A=document.createElement('canvas'),E=document.createElement('canvas'),Rr=document.createElement('canvas');[A,E,Rr].forEach(c=>c.width=c.height=W);
+   const a=A.getContext('2d'),e=E.getContext('2d'),r=Rr.getContext('2d');
+   a.fillStyle='#c4c6cc';a.fillRect(0,0,W,W);r.fillStyle='#2e2e2e';r.fillRect(0,0,W,W);
+   for(let k=0;k<500;k++){const y=Math.random()*W,x=Math.random()*W,l=40+Math.random()*260,v=Math.random();a.strokeStyle=v>.5?`rgba(255,255,255,${.02+Math.random()*.04})`:`rgba(0,0,0,${.03+Math.random()*.05})`;a.lineWidth=.6+Math.random();a.beginPath();a.moveTo(x,y);a.lineTo(x+l,y+(Math.random()-.5)*1.2);a.stroke();
+    r.strokeStyle=`rgba(${v>.5?200:20},${v>.5?200:20},${v>.5?200:20},.07)`;r.beginPath();r.moveTo(x,y);r.lineTo(x+l,y);r.stroke()}
+   const g=a.createRadialGradient(W/2,W/2,W*.2,W/2,W/2,W*.75);g.addColorStop(0,'rgba(255,255,255,.05)');g.addColorStop(1,'rgba(0,0,0,.18)');a.fillStyle=g;a.fillRect(0,0,W,W);
+   a.lineWidth=0;a.strokeStyle='rgba(255,255,255,.28)';a.beginPath();a.moveTo(4,W-4);a.lineTo(4,4);a.lineTo(W-4,4);a.stroke();a.strokeStyle='rgba(0,0,0,.5)';a.beginPath();a.moveTo(W-4,4);a.lineTo(W-4,W-4);a.lineTo(4,W-4);a.stroke();
+   e.fillStyle='#000';e.fillRect(0,0,W,W);
+   const f='600 40px "Josefin Sans",sans-serif',NM=S[i].name.toUpperCase();
+   [a,e].forEach((c,j)=>{c.font=f;c.textAlign='center';c.textBaseline='middle';c.letterSpacing='2px';
+     if(j===0){c.fillStyle='rgba(0,0,0,.55)';c.fillText(NM,W/2+1.5,W/2+2.5);c.fillStyle='rgba(255,255,255,.75)';c.fillText(NM,W/2-.5,W/2-.5)}
+     else{c.fillStyle='#fff';c.fillText(NM,W/2,W/2)}});
+   const T=c=>{const t=new THREE.CanvasTexture(c);t.anisotropy=8;return t},tm=T(A);tm.encoding=THREE.sRGBEncoding;
+   return new THREE.MeshPhysicalMaterial({map:tm,roughnessMap:T(Rr),roughness:1,metalness:1,clearcoat:.9,clearcoatRoughness:.06,emissive:0xffffff,emissiveMap:(()=>{const t=T(E);t.encoding=THREE.sRGBEncoding;return t})(),emissiveIntensity:.16,envMapIntensity:1.9})
+  };
+  mats=[];for(let i=0;i<N;i++)mats[MI[i]]=face(i);
+  if(cube)cube.material=mats;
+ };
+ mk();
+ const rb=(r,n)=>{const g=new THREE.BoxGeometry(2,2,2,n,n,n),p=g.attributes.position,nr=g.attributes.normal,v=new THREE.Vector3(),c=new THREE.Vector3(),o=new THREE.Vector3(),h=1-r,cl=x=>Math.max(-h,Math.min(h,x));
+  for(let i=0;i<p.count;i++){v.fromBufferAttribute(p,i);v.set(Math.sin(v.x*Math.PI/2),Math.sin(v.y*Math.PI/2),Math.sin(v.z*Math.PI/2));c.set(cl(v.x),cl(v.y),cl(v.z));o.subVectors(v,c);
+   if(o.lengthSq()>1e-10){o.normalize();v.copy(c).addScaledVector(o,r);nr.setXYZ(i,o.x,o.y,o.z)}p.setXYZ(i,v.x,v.y,v.z)}return g};
+ cube=new THREE.Mesh(rb(.07,16),mats);cube.castShadow=true;cube.rotation.set(-.35,.6,0);pg.add(cube);
+ (document.fonts&&document.fonts.load('600 58px "Josefin Sans"').then(()=>{mk();cube.material=mats}).catch(()=>{}));
+ 
+ let vw=1,vh=1,wpp=.01,visW=1,visH=1;
+ function size(){vw=innerWidth;vh=innerHeight;renderer.setSize(vw,vh,false);camera.aspect=vw/vh;
+  camZ=Math.max(11.5,(6.2/(vw/vh))/(2*Math.tan(fov*Math.PI/360)));camera.position.set(0,0,camZ);camera.updateProjectionMatrix();
+  visH=2*camZ*Math.tan(fov*Math.PI/360);visW=visH*vw/vh;wpp=visH/vh}
+ addEventListener('resize',size);size();
+ /* pointer: hover, drag (with inertia), click-to-open, wheel */
+ const ray=new THREE.Raycaster(),nd=new THREE.Vector2(),px={x:0,y:0};let down=null,lastMove=0;
+ const pick=(cx,cy)=>{nd.set(cx/vw*2-1,-(cy/vh)*2+1);ray.setFromCamera(nd,camera);const h=ray.intersectObject(cube)[0];return h?MI.indexOf(h.face.materialIndex):-1};
+ cv.addEventListener('pointerdown',e=>{if(state!=='idle')return;cv.setPointerCapture(e.pointerId);down={x:e.clientX,y:e.clientY,t:performance.now(),m:0};drag=true;cv.classList.add('drag');body.classList.add('used');vel.set(0,0);target=null;lastMove=performance.now()});
+ cv.addEventListener('pointermove',e=>{
+  px.x=e.clientX/vw*2-1;px.y=e.clientY/vh*2-1;
+  if(drag&&down){const dx=e.clientX-down.x0||0;const mx=e.movementX??0,my=e.movementY??0;
+   down.m+=Math.abs(mx)+Math.abs(my);const k=.0085;
+   const q=new THREE.Quaternion().setFromEuler(new THREE.Euler(my*k,mx*k,0));cube.quaternion.premultiply(q);
+   const now=performance.now(),dt=Math.max((now-lastMove)/1000,.008);lastMove=now;
+   vel.x=vel.x*.6+(mx*k/dt)*.4;vel.y=vel.y*.6+(my*k/dt)*.4;
+   const m=Math.hypot(vel.x,vel.y);if(m>7)vel.multiplyScalar(7/m);
+  }else if(e.pointerType==='mouse'&&state==='idle'){hover=pick(e.clientX,e.clientY);cv.classList.toggle('hov',hover>-1)}
+ });
+ const up=e=>{if(!drag)return;drag=false;cv.classList.remove('drag');
+  if(down&&down.m<8&&performance.now()-down.t<450){const i=pick(e.clientX,e.clientY);if(i>-1)openFace(i);vel.set(0,0)}
+  if(performance.now()-lastMove>90)vel.set(0,0);if(reduce)vel.set(0,0);down=null};
+ cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);
+ cv.addEventListener('pointerleave',()=>{if(!drag){hover=-1;cv.classList.remove('hov')}});
+ cv.addEventListener('wheel',e=>{if(state!=='idle')return;e.preventDefault();body.classList.add('used');
+  if(reduce)return void cube.quaternion.premultiply(new THREE.Quaternion().setFromEuler(new THREE.Euler(Math.sign(e.deltaY)*.5,0,0)));
+  vel.y=Math.max(-6,Math.min(6,vel.y+e.deltaY*.011));vel.x=Math.max(-6,Math.min(6,vel.x+e.deltaX*.011))},{passive:false});
+ /* loop */
+ const qd=new THREE.Quaternion(),eu=new THREE.Euler(),nv=new THREE.Vector3(),pos=new THREE.Vector3(),tc=new THREE.Vector3();let last=performance.now(),frontI=0;
+ const lab=$('front');
+ function tick(now){requestAnimationFrame(tick);
+  const dt=Math.min((now-last)/1000,.05);last=now;const e1=1-Math.exp(-dt*3);
+  if(!reduce){pg.rotation.x+=(px.y*.09-pg.rotation.x)*e1*.6;pg.rotation.y+=(px.x*.13-pg.rotation.y)*e1*.6;key.position.x=3+px.x*2.5;key.position.y=6-px.y*1.5}
+  if(state==='idle'&&!drag){
+   if(vel.lengthSq()>1e-5){eu.set(vel.y*dt,vel.x*dt,0);qd.setFromEuler(eu);cube.quaternion.premultiply(qd);vel.multiplyScalar(Math.exp(-dt*(reduce?14:1.9)))}
+   if(!reduce&&vel.length()<.4){qd.setFromAxisAngle(nv.set(0,1,0),.045*dt);cube.quaternion.premultiply(qd)}
+  }else if(state==='snap'){
+   cube.quaternion.slerp(target,reduce?1:1-Math.exp(-dt*3.4));
+   if(cube.quaternion.angleTo(target)<.004){cube.quaternion.copy(target);state='section';pg.rotation.set(0,0,0);showRoom(snapI)}
+  }
+  cube.quaternion.normalize();
+  /* position / scale: centre stage, or a small return-cube in the corner */
+  let ts=1;tc.set(0,0,0);
+  if(state==='section'){ts=30*wpp/1.0;tc.set(-visW/2+(14+34)*wpp,visH/2-(14+34)*wpp,0)}
+  const ek=reduce?1:1-Math.exp(-dt*3.2);
+  cube.position.lerp(tc,ek);cube.scale.setScalar(cube.scale.x+(ts-cube.scale.x)*ek);
+  floor.visible=state!=='section'&&cube.scale.x>.6;
+  /* which face looks at us; hover glow */
+  let best=-1,bd=-2;FN.forEach((n,i)=>{const d=nv.copy(n).applyQuaternion(cube.quaternion).z;if(d>bd){bd=d;best=i}});frontI=best;
+  const spin=vel.length();
+  mats.forEach((m,mi)=>{const i=MI.indexOf(mi),h=hover===i&&state==='idle'?1:0,f=(i===frontI&&spin<.6&&state==='idle')?.35:0,tI=.16+.85*h+.22*f,tE=1.9+.7*h;
+   m.emissiveIntensity+=(tI-m.emissiveIntensity)*e1;m.envMapIntensity+=(tE-m.envMapIntensity)*e1});
+  const show=state==='idle'&&!drag&&spin<.5;lab.textContent=S[hover>-1?hover:frontI].name;lab.style.opacity=show?(hover>-1?.95:.5):0;
+  renderer.render(scene,camera);
+ }
+ requestAnimationFrame(tick);body.classList.add('ready');
+ cv.addEventListener('webglcontextlost',e=>{e.preventDefault();fbox.classList.add('show')});
+}
+})();
+</script>
+</body>
+</html>
