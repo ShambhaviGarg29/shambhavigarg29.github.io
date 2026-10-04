@@ -34,7 +34,7 @@ window.portfolioData = {
         { k: "p", text: "I work at the intersection of numbers and narrative. I'm comfortable in a dataset — Python, statistical analysis, survey design — and I'm equally comfortable behind a camera, writing, directing and cutting short documentaries. Model United Nations sharpened a third skill underneath both: the ability to argue a position out loud, read a room, and find the compromise that actually holds. I use all three together, because the policy questions I care about are never just about the numbers or just about the story — they need both to land." },
         { k: "p", text: "Today I'm studying Applied Mathematics & Statistics at Stony Brook University, with Computer Science as a planned double major, expected to graduate in 2030. It's the quantitative and computational foundation for a career I imagine in public policy, economics, or international relations — built on a simple belief: that data and storytelling, used well, are tools for equity." },
         { k: "photos", items: [{ src: "assets/p08.jpg", cap: "" }, { src: "assets/p14.jpg", cap: "class of 2030" }] },
-        { k: "video", id: "RTDystQg6cU", cap: "a film I made" },
+        { k: "video", id: "RTDystQg6cU", cap: "Interviewed by a highly acclaimed youtuber in India" },
         { k: "rows", items: [
           { meta: "Sport", title: "Badminton", text: "Zonal Silver Medalist (Delhi, 2021–22). Punjab State Championship Quarterfinalist (2023)." },
           { meta: "Languages", title: "English, Hindi, French, Spanish", text: "English (fluent), Hindi (native), French (conversational), Spanish (conversational)." }
