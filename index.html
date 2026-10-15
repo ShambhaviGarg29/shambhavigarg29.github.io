@@ -104,15 +104,15 @@ figcaption{margin-top:.6rem;font:italic 300 1rem var(--serif);color:var(--mute)}
 
 /* Quiet, asymmetrical homepage links */
 #orbit-links{position:fixed;inset:0;z-index:7;pointer-events:none;transition:opacity 1s ease;}
-#orbit-links a{position:absolute;display:inline-block;pointer-events:auto;color:var(--soft);text-decoration:none;text-transform:uppercase;font-size:.68rem;letter-spacing:.22em;padding:.65rem .85rem;border:1px solid rgba(255,255,255,.16);border-radius:999px;background:rgba(0,0,0,.18);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);white-space:nowrap;transition:color .4s,border-color .4s,background .4s;animation:drift 17s ease-in-out infinite alternate;}
-#orbit-links a:hover{color:#fff;border-color:rgba(255,255,255,.65);background:rgba(255,255,255,.07)}
-#orbit-links a:nth-child(1){left:12%;top:31%;animation-duration:19s;animation-delay:-4s;--dx:12px;--dy:-17px}
-#orbit-links a:nth-child(2){right:10%;top:43%;animation-duration:23s;animation-delay:-11s;--dx:-15px;--dy:13px}
-#orbit-links a:nth-child(3){left:24%;bottom:20%;animation-duration:21s;animation-delay:-7s;--dx:-10px;--dy:16px}
-@keyframes drift{0%{transform:translate3d(0,0,0)}100%{transform:translate3d(var(--dx,12px),var(--dy,-12px),0)}}
+#orbit-links a{position:absolute;display:inline-block;pointer-events:auto;color:var(--soft);font-family:var(--sans);font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:5px;padding:0;border:0;border-radius:0;background:transparent;white-space:nowrap;transition:color .4s;animation:drift 13s ease-in-out infinite alternate;}
+#orbit-links a:hover{color:#fff;text-decoration-thickness:2px}
+#orbit-links a:nth-child(1){left:12%;top:31%;animation-duration:13s;animation-delay:-2s;--dx:72px;--dy:-48px}
+#orbit-links a:nth-child(2){right:10%;top:43%;animation-duration:17s;animation-delay:-9s;--dx:-66px;--dy:52px}
+#orbit-links a:nth-child(3){left:24%;bottom:20%;animation-duration:15s;animation-delay:-5s;--dx:-48px;--dy:-58px}
+@keyframes drift{0%{transform:translate3d(0,0,0)}50%{transform:translate3d(var(--dx,48px),var(--dy,-36px),0)}100%{transform:translate3d(calc(var(--dx,48px) * -.45),calc(var(--dy,-36px) * -.45),0)}}
 body.open #orbit-links{opacity:0;pointer-events:none}
-@media(max-width:760px){#orbit-links a{font-size:.58rem;letter-spacing:.14em;padding:.55rem .65rem}#orbit-links a:nth-child(1){left:5%;top:22%}#orbit-links a:nth-child(2){right:4%;top:57%}#orbit-links a:nth-child(3){left:10%;bottom:19%}}
-@media(prefers-reduced-motion:reduce){#orbit-links a{animation:none}}
+@media(max-width:760px){#orbit-links a{font-size:.58rem;letter-spacing:.14em;padding:0}#orbit-links a:nth-child(1){left:5%;top:22%}#orbit-links a:nth-child(2){right:4%;top:57%}#orbit-links a:nth-child(3){left:10%;bottom:19%}}
+/* Homepage links intentionally retain gentle movement so they are discoverable. */
 
 </style>
 </head>
@@ -120,9 +120,9 @@ body.open #orbit-links{opacity:0;pointer-events:none}
 <div id="halo" aria-hidden="true"></div><canvas id="gl" aria-hidden="true"></canvas>
 <div class="tiny" id="nm">shambhavi garg</div>
 <div id="orbit-links" aria-label="Quick links on the homepage">
-  <a href="assets/resume.pdf" target="_blank" rel="noopener">Resume ↗</a>
-  <a href="https://www.linkedin.com/in/shambhavigarg29jun" target="_blank" rel="noopener">LinkedIn ↗</a>
-  <a href="mailto:shambhavi.garg@stonybrook.edu">Contact me ↗</a>
+  <a href="assets/resume.pdf" target="_blank" rel="noopener">Resume</a>
+  <a href="https://www.linkedin.com/in/shambhavigarg29jun" target="_blank" rel="noopener">LinkedIn</a>
+  <a href="mailto:shambhavi.garg@stonybrook.edu">Contact me</a>
 </div>
 
 <div id="top" role="status"><span id="hint"></span></div>
